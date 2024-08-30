@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Styled Toolbar</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: transparent;
+            -webkit-app-region: drag;
+        }
+
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            background-color: rgba(74, 70, 158, 0.373);
+            padding: 10px;
+            border-radius: 15px;
+            width: 250px;
+            height: 30px;
+            position: relative;
+            -webkit-app-region: no-drag;
+        }
+
+        .drag-handle {
+            width: 15%;
+            height: 4px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            position: absolute;
+            top: 5px;
+            -webkit-app-region: drag;
+        }
+
+        .toolbar-item {
+            margin-top: auto;
+            user-select: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="toolbar">
+
+        <div class="drag-handle"></div>
+        <div class="toolbar-item" draggable="true">🖥️</div>
+        <div class="toolbar-item" draggable="true">📅</div>
+        <div class="toolbar-item" draggable="true">🔍</div>
+        <div class="toolbar-item" draggable="true">🗺️</div>
+        <div class="toolbar-item" draggable="true">⚙️</div>
+    </div>
+
+    <script>
+
+
+        const toolbar = document.querySelector(".toolbar");
+        let draggingItem;
+
+        toolbar.addEventListener("dragstart", (event) => {
+            draggingItem = event.target;
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("text/html", event.target.outerHTML);
+            event.target.classList.add("dragging");
+        });
+
+        toolbar.addEventListener("dragover", (event) => {
+            event.preventDefault();
+            event.dataTransfer.dropEffect = "move";
+
+            const target = event.target.closest(".toolbar-item");
+            if (target && target !== draggingItem) {
+                const bounding = target.getBoundingClientRect();
+                const offset = bounding.y + bounding.height / 2;
+
+                if (event.clientY - offset > 0) {
+                    toolbar.insertBefore(draggingItem, target.nextSibling);
+                } else {
+                    toolbar.insertBefore(draggingItem, target);
+                }
+            }
+        });
+
+        toolbar.addEventListener("dragend", () => {
+            draggingItem.classList.remove("dragging");
+            draggingItem = null;
+        });
+
+        toolbar.addEventListener("drop", (event) => {
+            event.preventDefault();
+        });
+    </script>
+</body>
+
+</html>
+
+
+<!-- https://emojipedia.org/ -->
+
+
+
+
+
+
+
