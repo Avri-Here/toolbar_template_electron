@@ -5,8 +5,8 @@
 
 
 const path = require('path')
+const { globalShortcut } = require('electron');
 const { app, BrowserWindow, screen } = require('electron');
-
 require('electron-reload')(path.join(__dirname, '../..'));
 
 
@@ -15,7 +15,7 @@ const createToolBar = () => {
     const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().workAreaSize;
 
     const x = Math.floor((screenWidth - 270) / 2);
-    const y = screenHeight - 50;
+    const y = screenHeight - 55;
 
     const mainWindow = new BrowserWindow({
         width: 270,
@@ -33,10 +33,18 @@ const createToolBar = () => {
         }
     });
 
-    
+
     // mainWindow.setIgnoreMouseEvents(true, { forward: true });
 
     mainWindow.loadFile('src/renderer/app/app.html');
+
+
+
+    globalShortcut.register('Control+2', () => {
+        mainWindow.setPosition(x, y);
+        mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+    });
+
 
     mainWindow.on("ready-to-show", () => {
         const isDev = process.defaultApp || /[\\/]electron[\\/]/.test(process.execPath);
