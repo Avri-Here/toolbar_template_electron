@@ -5,13 +5,23 @@
 
 
 const path = require('path')
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, screen } = require('electron');
+
 require('electron-reload')(path.join(__dirname, '../..'));
-function createWindow() {
+
+
+const createToolBar = () => {
+
+    const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().workAreaSize;
+
+    const x = Math.floor((screenWidth - 270) / 2);
+    const y = screenHeight - 50;
+
     const mainWindow = new BrowserWindow({
-        width: 400,
-        height: 100,
-        center: true,
+        width: 270,
+        height: 50,
+        x: x,
+        y: y,
         frame: false,
         transparent: true,
         resizable: false,
@@ -22,6 +32,9 @@ function createWindow() {
             contextIsolation: false,
         }
     });
+
+    
+    // mainWindow.setIgnoreMouseEvents(true, { forward: true });
 
     mainWindow.loadFile('src/renderer/app/app.html');
 
@@ -34,7 +47,7 @@ function createWindow() {
 
 }
 
-app.whenReady().then(createWindow);
+app.whenReady().then(createToolBar);
 
 app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
@@ -44,6 +57,29 @@ app.on('window-all-closed', () => {
 
 app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) {
-        createWindow();
+        createToolBar();
     }
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
