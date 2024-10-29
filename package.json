@@ -7,7 +7,6 @@
   },
   "author": "Avri",
   "license": "ISC",
-  "description": "",
   "devDependencies": {
     "electron": "^32.0.1"
   },
